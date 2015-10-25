@@ -10,17 +10,17 @@ pkgTest <- function(x)
       }
 }
 
-# getSCC_Rows will check term1 and term2 are in the colName of SCC.
-# If getAll = False -> list of unique rows from SCC with term1 and term2 is 
+# getSCC_Rows will check word1 and word2 are in the colName of SCC.
+# If getAll = False -> list of unique rows from SCC with word1 and word2 is 
 # returned. 
-# If getAll = True -> list of all rows from SCC with term1 and term2 is 
+# If getAll = True -> list of all rows from SCC with word1 and word2 is 
 # returned. 
-getSCC_Rows <- function ( colName, term1, term2, getAll = TRUE) 
+getSCC_Rows <- function ( colName, word1, word2, getAll = TRUE) 
 {
       column <- SCC[,colName]
-      term1_list <- grep (term1, column, value = TRUE)
-      term1and2_list <- grep(term2, term1_list, value = TRUE)
-      uniqueList <- unique(term1and2_list)
+      word1_list <- grep (word1, column, value = TRUE)
+      word1and2_list <- grep(word2, word1_list, value = TRUE)
+      uniqueList <- unique(word1and2_list)
       if ( getAll)
             SCC %>% filter(column %in% uniqueList)
       else
@@ -28,29 +28,37 @@ getSCC_Rows <- function ( colName, term1, term2, getAll = TRUE)
 }
 
 # load packages that I will be using
-pkgTest("dplyr")
+print ("Start loading required packages ...")
+pkgs <- c("dplyr", "tidyr", "ggplot2", "lattice", "grid")
+sapply(pkgs, pkgTest)
+
 library(dplyr)
-pkgTest("tidyr")
 library(tidyr)
-pkgTest("ggplot2")
 library(ggplot2)
-pkgTest("lattice")
 library(lattice)
-pkgTest("grid")
 library(grid)
+print ("... done loading required packages.")
 
 # load data
-NEI <- readRDS("NEI_data/summarySCC_PM25.rds")
-# check that data has only years that we need:
+print ("Start loading data ...")
+if(!exists("NEI")){
+      NEI <- readRDS("./NEI_data/summarySCC_PM25.rds")
+}
+
+if(!exists("SCC")){
+      SCC <- readRDS("./NEI_data/Source_Classification_Code.rds")
+}
+
+if(!exists("NEI_Baltimore")){
+      NEI_Baltimore <- NEI %>% filter (fips == "24510")
+}
+
+if(!exists("NEI_BandLA")){
+      NEI_BandLA <- NEI %>% filter ( fips == "06037" | fips == "24510")
+}
+print ("... done loading data.")
+# just checking that data has only years that we need:
 NEI %>% select( year ) %>% distinct()
-
-SCC <- readRDS("NEI_data/Source_Classification_Code.rds")
-
-NEI_Baltimore <- NEI %>% filter (fips == "24510")
-
-NEI_BandLA <- NEI %>% filter ( fips == "06037" | fips == "24510")
-
-
 
 
 

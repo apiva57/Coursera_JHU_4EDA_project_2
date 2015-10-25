@@ -1,11 +1,21 @@
 node <- "/Users/anna/OneDrive/Coursera/JHU - Data Science/"
-localPath <- "4. Exploratory Data Analysis/Week 03/Project 2/"
+localPath <- "4. Exploratory Data Analysis/Week 03/Coursera_JHU_4EDA_project_2/"
 setwd(paste(node, localPath, sep = ""))
 source("Init.R")
 
 # Q4 
 # Across the United States, how have emissions from coal combustion-related
 # sources changed from 1999–2008?
+
+# Answer
+# The main difficulty here was to decide how to select data. I ended up looking
+# for words "Coal" and "Comb" in every column of SCC data. If I will find those
+# 2 words in any of the columns than I will include that SCC code into the data
+# that I am plotting. 
+# Plots are quite boring. The first plot is a main answer and it showes changes 
+# in the Total Emission from Coal Combustion souces by year. 
+# Second and third plot solidify the trend from the first plot with very similar 
+# trend for Median and Mean values.
 
 # Check various fields that might have words coal and comb in them. 
 # Get a feel on how to get all data related to coal and combustion

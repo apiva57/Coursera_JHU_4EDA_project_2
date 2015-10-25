@@ -1,5 +1,5 @@
 node <- "/Users/anna/OneDrive/Coursera/JHU - Data Science/"
-localPath <- "4. Exploratory Data Analysis/Week 03/Project 2/"
+localPath <- "4. Exploratory Data Analysis/Week 03/Coursera_JHU_4EDA_project_2/"
 setwd(paste(node, localPath, sep = ""))
 source("Init.R")
 

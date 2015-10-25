@@ -1,5 +1,5 @@
 node <- "/Users/anna/OneDrive/Coursera/JHU - Data Science/"
-localPath <- "4. Exploratory Data Analysis/Week 03/Project 2/"
+localPath <- "4. Exploratory Data Analysis/Week 03/Coursera_JHU_4EDA_project_2/"
 setwd(paste(node, localPath, sep = ""))
 source("Init.R")
 
@@ -9,6 +9,20 @@ source("Init.R")
 # emissions from 1999–2008 for Baltimore City? Which have seen increases in 
 # emissions from 1999–2008? Use the ggplot2 plotting system to make a plot 
 # answer this question
+
+# Answer
+# First 4 plots were mainly a way to learn a lesson that:
+# - graphs can be very misleading depending on how you choose to subset the data
+# - logarithmic scale can be very powerful way to show trends in data with a
+#   kind of distribution we have
+# - dealing with logarithmic scale and zeroes in the data can be tricky and I
+#   am not sure I know what is the right approach
+# - trying to use smoothing with linear regression (geom_smooth(method = "lm"))
+#   over essentially 4 series of data is not a good idea.
+# Plot 5 is showing scaled relationship between total/median/mean emission for 
+# each type. It is quite busy. 
+# I will call plot 6 here as a main answer, it showes total emission per type.
+# Plots 6 and 7 are showing Median and Men Emissions.
 
 # multiplot function allowes to print multiple ggplot graphs on the same page.
 # ( it is modified version of this example: 
@@ -44,15 +58,8 @@ multiplot <- function(..., cols=1) {
   }
 }
 
-# Self-defined formatting function for years
-year_formatter <- function(x) {
-  if (x == 1999) lab <- "99"
-  if (x == 2002) lab <- "02"
-  if (x == 2005) lab <- "05"
-  if (x == 2008) lab <- "08"
-}
-
-# let's get overall feel for data
+# let's get overall feel for data, this code is purely for getting feel of the
+# data
 summary(NEI_Baltimore)
 unique(NEI_Baltimore$year)
 
@@ -74,17 +81,17 @@ sum(NEI_Baltimore[NEI_Baltimore$year == 2008,]$Emissions == 0)
 # start plotting
 png(filename = "plot3.png", width = 1200, height = 2400)
 
-# # Scenario 0 - I know that data are very dence between 0 and 5, but also have 
-# # a few really big values. First, I want to use a regualr boxplot  to get 
-# # a feel for outliers
+# Attempt 0 - I know that data are very dence between 0 and 5, but also have 
+# a few really big values. First, I want to use a regualr boxplot  to get 
+# a feel for outliers
 # gm1 <- ggplot(NEI_Baltimore, aes(type, Emissions)) +
 #       labs(title = "Emission in Baltimore by type") + 
 #       geom_boxplot()
 # 
-# # let's drop all the values that are greater than 100. After that we can see that
-# # max non-outlier value for NONPOINT data is about 40. So I would consider all 
-# # values that are less than 40. Repeating the same logic multiple times I decided to 
-# # stop at 12
+# let's drop all the values that are greater than 100. After that we can see that
+# max non-outlier value for NONPOINT data is about 40. So I would consider all 
+# values that are less than 40. Repeating the same logic multiple times I decided to 
+# stop at 12
 NEI_Baltimore_NoOutliers <- filter(NEI_Baltimore, Emissions <= 12 )
 # how many records I dropped?
 n <- dim (NEI_Baltimore) - dim(NEI_Baltimore_NoOutliers)
@@ -180,8 +187,8 @@ g4 <- ggplot(NEI_Baltimore, aes(year, modEmissions, 10)) +
 # always saw overall decreasing trend for each type. But now Non-Road trend is 
 # increasing. I think that due to nature of our data using mean values over 4
 # points (years) for a trend maybe misleading ( and mean values are used to for
-# geom_smooth(method = "lm"). I want to use sum, mean and median values for each 
-# year in order to judge a trend.
+# geom_smooth(method = "lm"). I want to look at sum, mean and median values for 
+# each year in order to judge a trend.
 
 # Let's calculate median/mean/total values per year per type first.
 raw_totals <- NEI_Baltimore  %>% 
@@ -259,3 +266,7 @@ g8 <- ggplot(raw_totals, aes(x=year, y=mean)) +
       ggtitle("Mean Emissions")
 multiplot(g1, g2, g3, g4, g5, g6, g7, g8, cols=2)
 dev.off()
+
+# I modified NEI_Baltimore in this file. Will cleanup it later. For now I will 
+# just remove it from the environment
+rm(NEI_Baltimore)
